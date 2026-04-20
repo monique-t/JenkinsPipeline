@@ -35,11 +35,15 @@ pipeline {
             //     }
             }
         }
-//Add steps to print "unit tests" and "integration tests"messages.
-        stage('Test') {
+//Stage 2: Unit and Integration Tests – Run unit tests to ensure the code functions as
+//expected and run integration tests to ensure the different components of the
+//application work together as expected. You need to specify test automation tools for
+//this stage.
+        stage('Unit and Integration Tests') {
             steps {
                 echo "unit tests"
                 echo "integration tests"
+                echo " test automation tool ?"
             }
         }
 // Add a message showing that "check the quality of the code".
