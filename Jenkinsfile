@@ -21,17 +21,19 @@ pipeline {
                 echo "fetch the source code from the directory path specified by the environment variable: ${DIRECTORY_PATH}"
                 echo "compile the code and generate any necessary artefacts"
             }
-            // post{
+            post{
             //     always{
             //         echo "always"
             //     }
-            //     success{
-            //         echo "Build executed successfully"
-            //     }
+                success{
+                    mail to:"monique.tite@gmail.com",
+                    subject: "Build Status email",
+                    body: "Build executed successfully"
+                }
             //     failure{
             //         echo "Build execution failed"
             //     }
-            // }
+            }
         }
 //Add steps to print "unit tests" and "integration tests"messages.
         stage('Test') {
