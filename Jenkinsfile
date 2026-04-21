@@ -4,72 +4,64 @@ pipeline {
     
     environment {
         //The path of the code directory being fetched.
-        DIRECTORY_PATH = "/var/lib/jenkins/workspace/first_pipeline"
-        // The name of the testing environment.
-        TESTING_ENVIRONMENT = "testingEnvironment"
-        // My name
-        PRODUCTION_ENVIRONMENT = "Monique"
+        DIRECTORY_PATH = "/var/lib/jenkins/workspace/GitHub_Pipeline"
+        // The name of the staging environment.
+        STAGING_ENVIRONMENT = "AWS EC2 STAGE"
+        // The name of the production environment.
+        PRODUCTION_ENVIRONMENT = "AWS EC2 PROD"
     }
+
     stages {
-// print a message that shows: 
-// "fetch the source code from the directory path specified by DIRECTORY_PATH
-// environment variable". 
-// print this message:
-//  "compile the code and generate any necessary artifacts".
+// Stage 1: Build – Build the code using a build automation tool to compile and package
+// your code. You need to specify at least one build automation tool, e.g., Maven.
         stage('Build') {
             steps {
                 echo "fetch the source code from the directory path specified by the environment variable: ${DIRECTORY_PATH}"
-                echo "compile the code and generate any necessary artefacts"
-            }
-            post{
-            //     always{
-            //         echo "always"
-            //     }
-                success{
-                    mail to:"monique.tite@gmail.com",
-                    subject: "Build Status email",
-                    body: "Build executed successfully"
-                }
-            //     failure{
-            //         echo "Build execution failed"
-            //     }
+                echo "Call mvn - compile the code and generate any necessary artefacts - using Maven"
             }
         }
-//Stage 2: Unit and Integration Tests – Run unit tests to ensure the code functions as
-//expected and run integration tests to ensure the different components of the
-//application work together as expected. You need to specify test automation tools for
-//this stage.
+// Stage 2: Unit and Integration Tests – Run unit tests to ensure the code functions as
+// expected and run integration tests to ensure the different components of the
+// application work together as expected. 
+// You need to specify test automation tools for this stage.
         stage('Unit and Integration Tests') {
             steps {
-                echo "unit tests"
-                echo "integration tests"
-                echo " test automation tool ?"
+                echo "Run unit tests - using JUnit"
+                echo "Run integration tests - using Selenium"
+                // sh 'mvn test'
             }
         }
-// Add a message showing that "check the quality of the code".
-        stage('Code Quality Check') {
+// Stage 3: Code Analysis – Integrate a code analysis tool to analyse the code and ensure
+// it meets industry standards. Research and select a tool to analyse your code using Jenkins
+        stage('Code Analysis') {
             steps {
-                echo "check the quality of the code"
+                echo "Check the quality of the code - using SonarQube (SAST test)"
             }
         }
-// print "deploy the application to a testing environment".
-// The environment name is specified by the environment variable.
-        stage('Deploy') {
+
+// Stage 4: Security Scan – Perform a security scan on the code using a tool to identify
+// any vulnerabilities. Research and select a tool to scan your code.
+        stage('Security Scan') {
             steps {
-                echo "deploy the application to a testing environment: ${TESTING_ENVIRONMENT}"
+                echo "Perform security scan for vulnerabilities - using Zed Attack Proxy (ZAP) (DAST test)"
             }
         }
-// add a sleep command to simulate manual approval. 
-// The pipeline must pause for 10 seconds before continuing.        
-        stage('Approval') {
+// Stage 5: Deploy to Staging – Deploy the application to a staging server (e.g., AWS EC2 instance).
+        stage('Deploy to Staging') {
             steps {
+                echo "Deploy the application to a staging environment: ${STAGING_ENVIRONMENT}"
+            }
+        }
+// Stage 6: Integration Tests on Staging – Run integration tests on the staging
+// environment to ensure the application functions as expected in a production-like environment.       
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Run integration tests on staging - using Selenium'
                 echo "manual approval pending (simulated)"
                 sleep 10
             }
         }
-// add one step to show the related message to deploy the code to 
-// the production environment using the environment variable 
-// specifying the environment name.
+// Stage 7: Deploy to Production – Deploy the application to a production server (e.g. AWS EC2 instance).
         stage('Deploy to Production') {
             steps {
                 echo "deploy code to the production environment: ${PRODUCTION_ENVIRONMENT}"
@@ -77,16 +69,3 @@ pipeline {
         }
     }
 }
-
-//     stages {
-
-//         stage('Deploy') {
-//             steps {
-//                echo "$NAME, deployment is done"
-//                 // timeout(time: 3, unit: 'SECONDS')
-//                 // {
-//                 //     sleep 5
-//                 // }
-//         }
-//     }
-// }
