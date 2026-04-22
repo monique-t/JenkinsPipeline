@@ -57,6 +57,8 @@ pipeline {
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Run integration tests on staging - using Selenium'
+                echo "manual approval pending (simulated)"
+                sleep 10
             }
         }
 // Stage 7: Deploy to Production – Deploy the application to a production server (e.g. AWS EC2 instance).
